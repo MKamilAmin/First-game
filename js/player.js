@@ -18,6 +18,7 @@ export class Player {
     update() {
         this.draw();
         this.position.y += this.velocity.y;
+        this.position.x += this.velocity.x;
 
         if (this.position.y + this.height + this.velocity.y < canvas.height) {
             this.velocity.y += gravity;
