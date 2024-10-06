@@ -6,6 +6,11 @@ const c = canvas.getContext("2d");
 canvas.width = 1024;
 canvas.height = 576;
 
+const scaledCanvas = {
+    width: canvas.width / 4,
+    height: canvas.height / 4,
+};
+
 const player = new Player({ x: 0, y: 0 });
 const player2 = new Player({ x: 300, y: 100 });
 
@@ -14,10 +19,39 @@ const keys = {
     a: { pressed: false },
 };
 
+class Sprite {
+    constructor({ position, imageSrc }) {
+        this.position = position;
+        this.image = new Image();
+        this.image.src = imageSrc;
+    }
+
+    draw() {
+        if (!this.image) return;
+        c.drawImage(this.image, this.position.x, this.position.y);
+    }
+
+    update() {
+        this.draw();
+    }
+}
+
+const background = new Sprite({
+    position: { x: 0, y: 0 },
+    imageSrc: "./assets/background.png",
+});
+
 function animate() {
     window.requestAnimationFrame(animate);
     c.fillStyle = "#A3CFA7";
     c.fillRect(0, 0, canvas.width, canvas.height);
+
+    c.save();
+    c.scale(4, 4);
+    c.translate(0, -background.image.height + scaledCanvas.height);
+    background.draw();
+    c.restore();
+
     player.update();
     player2.update();
 
